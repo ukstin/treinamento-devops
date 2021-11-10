@@ -86,4 +86,4 @@ resource "aws_instance" "web" {
     Name = "ec2-uk-tf-${(count.index+1)}"
   }
 }
-# /////
+# ////
