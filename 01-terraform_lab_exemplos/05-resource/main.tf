@@ -73,7 +73,8 @@ provider "aws" {
   region = "sa-east-1"
 }
 resource "aws_instance" "web" {
-  subnet_id     = "subnet-056d64485d6e25ed6"
+  count = 3
+  subnet_id = "subnet-056d64485d6e25ed6"
   ami= "ami-0e66f5495b4efdd0f"
   instance_type = "t2.micro"
   associate_public_ip_address = true
@@ -82,7 +83,7 @@ resource "aws_instance" "web" {
     volume_size = 8
   }
   tags = {
-    Name = "ec2-uk-tf"
+    Name = "ec2-uk-tf-${(count.index+1)}"
   }
 }
 # /////
