@@ -34,7 +34,7 @@ resource "aws_instance" "web" {
 
 output "instance_ip_addr" {
   value = [
-    aws_instance.web.public_ip,
-    "ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.web.public_dns}"
+    aws_instance.web.private_ip,
+    "ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.web.private_dns}"
   ]
 }
