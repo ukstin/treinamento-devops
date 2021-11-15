@@ -1,124 +1,157 @@
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "192.168.16.0/20"
-  enable_dns_hostnames = true
+provider "aws" {
+    region = "sa-east-1"
+}
+
+#terraform import aws_vpc.vpc_uk vpc-0b7bc0aae8788da62
+# vpc-id = vpc-0b7bc0aae8788da62
+resource "aws_vpc" "vpc_uk" {
+    cidr_block = "172.18.0.0/16"
+    tags = {
+        Name = "vpc_uk"
+    }
+}
+
+# terraform import aws_internet_gateway.igw igw-<id>
+# igw ig = igw-00383a5bb2468a105
+resource "aws_internet_gateway" "igw_uk" {
+    vpc_id = aws_vpc.vpc_uk.id
+    tags = {
+        Name = "internet-gateway-uk"
+    }
+}
+
+resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
+    vpc_id = aws_vpc.vpc_uk.id
+    cidr_block = "172.19.0.0/16"
+}
+
+resource "aws_subnet" "subnet_uk_azA_public" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.1.0/24"
+  availability_zone = "sa-east-1a"
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "vcp_uk_terraform"
+    Name = "subnet_uk_azA_tf_public"
   }
 }
 
-resource "aws_subnet" "my_subnet" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "192.168.16.0/24"
-  availability_zone = "us-east-1a"
-  #map_public_ip_on_launch = true
+resource "aws_subnet" "subnet_uk_azB_public" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.2.0/24"
+  availability_zone = "sa-east-1b"
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet_uk_azA_terraform_public"
+    Name = "subnet_uk_azB_tf_public"
   }
 }
 
-resource "aws_subnet" "my_subnet2" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "192.168.17.0/24"
-  availability_zone = "us-east-1b"
-  #map_public_ip_on_launch = true
+resource "aws_subnet" "subnet_uk_azC_public" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.3.0/24"
+  availability_zone = "sa-east-1c"
+  map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet_uk_azB_terraform_public"
+    Name = "subnet_uk_azC_tf_public"
   }
 }
 
-resource "aws_subnet" "my_subnet3" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "192.168.18.0/24"
-  availability_zone = "us-east-1c"
-  #map_public_ip_on_launch = true
+resource "aws_subnet" "subnet_uk_azA_private" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.4.0/24"
+  availability_zone = "sa-east-1a"
 
   tags = {
-    Name = "subnet_uk_azC_terraform_public"
+    Name = "subnet_uk_azA_tf_private"
   }
 }
 
-resource "aws_subnet" "my_subnet4" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "192.168.19.0/24"
-  availability_zone = "us-east-1b"
+resource "aws_subnet" "subnet_uk_azB_private" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.5.0/24"
+  availability_zone = "sa-east-1b"
 
   tags = {
-    Name = "subnet_uk_azB_terraform_private"
+    Name = "subnet_uk_azB_tf_private"
   }
 }
 
-#resource "aws_internet_gateway" "gw" {
-#  vpc_id = aws_vpc.my_vpc.id
-#
-#  tags = {
-#    Name = "internet_gateway_uk_terraform"
-#  }
-#}
+resource "aws_subnet" "subnet_uk_azC_private" {
+  vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  cidr_block        = "172.19.6.0/24"
+  availability_zone = "sa-east-1c"
 
-resource "aws_route_table" "rt_terraform_private" {
-  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "subnet_uk_azC_tf_private"
+  }
+}
+
+resource "aws_route_table" "rt_uk_private" {
+  vpc_id = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
   route = []
   tags = {
     Name = "route_table_uk_private"
   }
 }
 
-resource "aws_route_table" "rt_terraform" {
-  vpc_id = aws_vpc.my_vpc.id
-  route = []
-
-#  route = [
-#      {
-#        carrier_gateway_id         = ""
-#        cidr_block                 = "0.0.0.0/0"
-#        destination_prefix_list_id = ""
-#        egress_only_gateway_id     = ""
-#        gateway_id                 = ""
-#        instance_id                = ""
-#       ipv6_cidr_block            = ""
-#        local_gateway_id           = ""
-#        nat_gateway_id             = ""
-#        network_interface_id       = ""
-#        transit_gateway_id         = ""
-#        vpc_endpoint_id            = ""
-#        vpc_peering_connection_id  = ""
-#      }
-#  ]
+resource "aws_route_table" "rt_uk_public" {
+  vpc_id = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
+  route = [
+      {
+        carrier_gateway_id         = ""
+        cidr_block                 = "0.0.0.0/0"
+        destination_prefix_list_id = ""
+        egress_only_gateway_id     = ""
+        gateway_id                 = aws_internet_gateway.igw_uk.id
+        instance_id                = ""
+       ipv6_cidr_block            = ""
+        local_gateway_id           = ""
+        nat_gateway_id             = ""
+        network_interface_id       = ""
+        transit_gateway_id         = ""
+        vpc_endpoint_id            = ""
+        vpc_peering_connection_id  = ""
+      }
+  ]
 
   tags = {
     Name = "route_table_uk_public"
   }
 }
 
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.my_subnet.id
-  route_table_id = aws_route_table.rt_terraform.id
+resource "aws_route_table_association" "subnet1_public" {
+  subnet_id      = aws_subnet.subnet_uk_azA_public.id
+  route_table_id = aws_route_table.rt_uk_public.id
 }
 
-resource "aws_route_table_association" "b" {
-  subnet_id      = aws_subnet.my_subnet2.id
-  route_table_id = aws_route_table.rt_terraform.id
+resource "aws_route_table_association" "subnet2_public" {
+    subnet_id      = aws_subnet.subnet_uk_azB_public.id
+    route_table_id = aws_route_table.rt_uk_public.id
 }
 
-resource "aws_route_table_association" "c" {
-  subnet_id      = aws_subnet.my_subnet3.id
-  route_table_id = aws_route_table.rt_terraform.id
+resource "aws_route_table_association" "subnet3_public" {
+    subnet_id      = aws_subnet.subnet_uk_azC_public.id
+    route_table_id = aws_route_table.rt_uk_public.id
 }
 
-resource "aws_route_table_association" "d" {
-  subnet_id = aws_subnet.my_subnet4.id
-  route_table_id = aws_route_table.rt_terraform_private.id
+resource "aws_route_table_association" "subnet4_private" {
+  subnet_id      = aws_subnet.subnet_uk_azA_private.id
+  route_table_id = aws_route_table.rt_uk_private.id
 }
 
-# resource "aws_network_interface" "my_subnet" {
-#   subnet_id           = aws_subnet.my_subnet.id
-#   private_ips         = ["172.17.10.100"] # IP definido para instancia
-#   # security_groups = ["${aws_security_group.allow_ssh1.id}"]
+resource "aws_route_table_association" "subnet5_private" {
+    subnet_id      = aws_subnet.subnet_uk_azB_private.id
+    route_table_id = aws_route_table.rt_uk_private.id
+}
 
-#   tags = {
-#     Name = "primary_network_interface my_subnet"
-#   }
-# }
+resource "aws_route_table_association" "subnet6_private" {
+    subnet_id      = aws_subnet.subnet_uk_azC_private.id
+    route_table_id = aws_route_table.rt_uk_private.id
+}
+// output "vpc_config" {
+//   value = [
+//     aws_vpc.vpc_uk,
+//   ]
+// }
