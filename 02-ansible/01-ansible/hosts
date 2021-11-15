@@ -1,2 +1,5 @@
 [ec2-ansible-test]
-ec2-54-147-9-247.compute-1.amazonaws.com
+18.229.160.116
+
+[ec2-ansible-test:vars]
+ansible_python_interpreter=/usr/bin/python3
