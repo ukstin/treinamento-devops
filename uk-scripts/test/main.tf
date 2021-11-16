@@ -150,8 +150,26 @@ resource "aws_route_table_association" "subnet6_private" {
     subnet_id      = aws_subnet.subnet_uk_azC_private.id
     route_table_id = aws_route_table.rt_uk_private.id
 }
-// output "vpc_config" {
-//   value = [
-//     aws_vpc.vpc_uk,
-//   ]
+
+// provider "aws" {
+//   region = "sa-east-1"
 // }
+
+resource "aws_instance" "web_uk" {
+  ami                     = data.aws_ami.ubuntu.id
+  instance_type           = "t3.micro"
+  key_name                = "privatekey_mysql_uk" # key chave publica cadastrada na AWS 
+  subnet_id               =  aws_subnet.subnet_uk_azB_public.id # vincula a subnet direto e gera o IP automático
+  #private_ip              = "172.17.0.100"
+  vpc_security_group_ids  = [
+    "${aws_security_group.allow_ssh_terraform.id}",
+  ]
+  root_block_device {
+    encrypted = true
+    volume_size = 8
+  }
+
+  tags = {
+    Name = "ec2-uk-tf-nginx"
+  }
+}

@@ -1,0 +1,5 @@
+[ec2-ansible-test]
+54.233.104.43
+
+[ec2-ansible-test:vars]
+ansible_python_interpreter=/usr/bin/python3

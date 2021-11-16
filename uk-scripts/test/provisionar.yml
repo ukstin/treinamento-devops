@@ -1,0 +1,90 @@
+- hosts: all
+  # handlers:
+  #   - name: "restart apache"
+  #     service:
+  #       name: apache2
+  #       state: restarted
+  #     become: yes
+  tasks:
+    #### com estado
+    # - name: "Criando um arquivo a toa no servidor"
+    #   copy: 
+    #     content: "teste danilo" 
+    #     dest: "/home/ubuntu/mais_um.txt"
+    #     backup: yes
+    #     owner: ubuntu
+    #     group: ubuntu
+    #     mode: 777
+
+    #### sem estado
+    # - name: "Criando um arquivo a toa no servidor"
+    #   shell: "echo 'escrevendo algo no servidor' >> teste.txt"
+  
+    - name: "Roda: sudo apt update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+    
+    - name: "Instala pacotes em lote"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - nginx
+        - python3
+        - python3-pycurl
+        - python3-mysqldb
+        - python3-pymysql
+        - unzip
+
+    - name: "Fazendo download do bootstrap"
+      get_url:
+        url: "https://github.com/startbootstrap/startbootstrap-freelancer/archive/gh-pages.zip"
+        dest: "/tmp/bootstrap-theme.zip"
+    
+    - name: "Fazendo descompactação dos arquivos do WP"
+      unarchive:
+        src: "/tmp/bootstrap-theme.zip"
+        dest: "/var/www/html/"
+        remote_src: yes
+      become: yes
+
+    - name: "Move diretorio bootstrap"
+      command: cp -r /var/www/html/startbootstrap-freelancer-gh-pages/. /var/www/html/
+      # copy:
+      #   src: '/var/www/html/startbootstrap-freelancer-gh-pages/'
+      #   dest: '/var/www/html/'
+      #   remote_src: yes
+      become: yes
+
+    # - name: "Configura o wp-config com as senhas"
+    #   replace:
+    #     path: '/var/www/wordpress/wp-config.php'
+    #     regexp: "{{ item.regex }}"
+    #     replace: "{{ item.value }}"
+    #   with_items:
+    #     - { regex: 'nome_do_banco_de_dados_aqui', value: 'banco_wordpress' }
+    #     - { regex: 'nome_de_usuario_aqui', value: 'root' }
+    #     - { regex: 'senha_aqui', value: 'root' }
+    #   become: yes
+
+    #### Altera direto no apache
+    # - name: "altera apache"
+    #   replace:
+    #     path: '/etc/apache2/sites-available/000-default.conf'
+    #     regexp: "{{ item.regex }}"
+    #     replace: "{{ item.value }}"
+    #   with_items:
+    #     - { regex: '/var/www/html', value: '/var/www/wordpress' }
+    #   become: yes
+
+    # - name: "Trocando pasta do render do apache para o wordpress"
+    #   copy:
+    #     src: "apache/000-default.conf"
+    #     dest: "/etc/apache2/sites-available/000-default.conf"
+    #   become: yes
+    #   notify:
+    #     - "restart apache"
