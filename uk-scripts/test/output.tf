@@ -8,10 +8,10 @@
 // }
 
 
-output "instance_ip_addr" {
+output "aws_instance_e_ssh" {
   value = [
-    aws_instance.web_uk.public_ip,
-    aws_instance.web_uk.private_ip,
-    "ssh -i privatekey_mysql_uk.pem ubuntu@${aws_instance.web_uk.public_dns}"
+    "PUBLIC_DNS=${aws_instance.web_uk.public_dns}",
+    "PUBLIC_IP=${aws_instance.web_uk.public_ip}",
+    "ssh -i privatekey_mysql_uk.pem ubuntu@${aws_instance.web_uk.public_dns} -o ServerAliveInterval=60"
   ]
 }
