@@ -1,5 +1,23 @@
-[ec2-ansible-test]
-54.233.104.43
+[k8s-master]
+54.233.176.186
 
-[ec2-ansible-test:vars]
+[k8s-node-1]
+18.228.19.170
+
+[k8s-node-2]
+52.67.209.173
+
+[k8s-node-3]
+18.231.33.182
+
+[k8s-master:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[k8s-node-1:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[k8s-node-2:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[k8s-node-3:vars]
 ansible_python_interpreter=/usr/bin/python3
