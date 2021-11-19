@@ -14,3 +14,29 @@ spec:
 # kubectl apply -f pod-nginx.yml
 # kubectl describe -f pod-nginx.yml
 # kubectl delete -f pod-nginx.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uk-cpf
+  labels:
+    app: uk-cpf
+spec:
+  containers:
+    - name: uk-cpf
+      image: ukstin/validar-cpf
+      ports:
+        - containerPort: 3000
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: clusterip-uk
+spec:
+  type: ClusterIP
+  selector:
+    app: uk-cpf
+  ports:
+    - port: 3000
+      targetPort: 3000
