@@ -5,7 +5,7 @@ uri=$(terraform output | grep public_ip | awk '{print $2;exit}' | sed -e "s/\",/
 
 echo $uri
 
-body=$(curl "http://$uri")
+body=$(curl -s "http://$uri")
 
 regex='Welcome to nginx!'
 
