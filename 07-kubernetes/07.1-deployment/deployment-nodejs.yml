@@ -10,7 +10,7 @@ spec:
       labels:
         app: lable-pod-nodejs
     spec:
-      containers:
+      containers::wq:
         - name: container-nodejs
           image: didox/app-imersao-docker-nodejs
           ports:

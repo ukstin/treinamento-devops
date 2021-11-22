@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "sa-east-1"
 }
 
 data "http" "myip" {
@@ -9,11 +9,16 @@ data "http" "myip" {
 resource "aws_instance" "dev_img_deploy_jenkins" {
   ami           = "ami-09e67e426f25ce0d7"
   instance_type = "t2.micro"
-  key_name      = "chave-jenkins"
+  key_name      = "privatekey_mysql_uk"
+  subnet_id     = "subnet-0ed3eafc0cc1414e0"
   tags = {
-    Name = "dev_img_deploy_jenkins"
+    Name = "dev_img_deploy_jenkins_uk"
   }
   vpc_security_group_ids = [aws_security_group.acesso_jenkins_dev_img.id]
+  root_block_device {
+    encrypted   = true
+    volume_size = 8
+  }
 }
 
 resource "aws_security_group" "acesso_jenkins_dev_img" {
@@ -70,6 +75,6 @@ output "dev_img_deploy_jenkins" {
     "resource_id: ${aws_instance.dev_img_deploy_jenkins.id}",
     "public_ip: ${aws_instance.dev_img_deploy_jenkins.public_ip}",
     "public_dns: ${aws_instance.dev_img_deploy_jenkins.public_dns}",
-    "ssh -i /var/lib/jenkins/.ssh/id_rsa ubuntu@${aws_instance.dev_img_deploy_jenkins.public_dns}"
+    "ssh -i /var/lib/jenkins/.ssh/privatekey_mysql_uk.pem ubuntu@${aws_instance.dev_img_deploy_jenkins.public_dns}"
   ]
 }

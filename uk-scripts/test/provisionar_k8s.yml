@@ -42,6 +42,7 @@
 
 # Alternatively, if you are the root user, you can run:
 
+  
 #   export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # You should now deploy a pod network to the cluster.
