@@ -7,7 +7,7 @@ data "http" "myip" {
 }
 
 resource "aws_instance" "dev_img_deploy_jenkins" {
-  ami           = "ami-09e67e426f25ce0d7"
+  ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   key_name      = "privatekey_mysql_uk"
   subnet_id     = "subnet-0ed3eafc0cc1414e0"
