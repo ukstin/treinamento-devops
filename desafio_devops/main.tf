@@ -4,12 +4,12 @@ provider "aws" {
 
 #terraform import aws_vpc.vpc_uk vpc-0b7bc0aae8788da62
 # vpc-id = vpc-0b7bc0aae8788da62
-// resource "aws_vpc" "vpc_desafio" {
-//     cidr_block = "172.18.0.0/16"
-//     tags = {
-//         Name = "vpc_desafio"
-//     }
-// }
+resource "aws_vpc" "vpc_desafio" {
+    cidr_block = "172.18.0.0/16"
+    tags = {
+        Name = "vpc_desafio"
+    }
+}
 
 # terraform import aws_internet_gateway.igw igw-<id>
 # igw ig = igw-00383a5bb2468a105
