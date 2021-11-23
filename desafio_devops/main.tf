@@ -13,15 +13,15 @@ resource "aws_vpc" "vpc_desafio" {
 
 # terraform import aws_internet_gateway.igw igw-<id>
 # igw ig = igw-00383a5bb2468a105
-resource "aws_internet_gateway" "igw_desafio" {
-    vpc_id = aws_vpc.vpc_desafio.id
-    tags = {
-        Name = "internet-gateway-desafio"
-    }
-}
+// resource "aws_internet_gateway" "igw_desafio" {
+//     vpc_id = "vpc-0b7bc0aae8788da62"
+//     tags = {
+//         Name = "internet-gateway-desafio"
+//     }
+// }
 
 resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
-    vpc_id = aws_vpc.vpc_desafio.id
+    vpc_id = "vpc-0b7bc0aae8788da62"
     cidr_block = "172.20.0.0/16"
 }
 
@@ -104,7 +104,7 @@ resource "aws_route_table" "rt_desafio_public" {
         cidr_block                 = "0.0.0.0/0"
         destination_prefix_list_id = ""
         egress_only_gateway_id     = ""
-        gateway_id                 = aws_internet_gateway.igw_desafio.id
+        gateway_id                 = "igw-00383a5bb2468a105"
         instance_id                = ""
        ipv6_cidr_block            = ""
         local_gateway_id           = ""
