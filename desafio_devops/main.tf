@@ -14,7 +14,7 @@ resource "aws_vpc" "vpc_desafio" {
 # terraform import aws_internet_gateway.igw igw-<id>
 # igw ig = igw-00383a5bb2468a105
 resource "aws_internet_gateway" "igw_desafio" {
-    vpc_id = aws_vpc.vpc_desafio
+    vpc_id = aws_vpc.vpc_desafio.id
     tags = {
         Name = "internet-gateway-desafio"
     }
