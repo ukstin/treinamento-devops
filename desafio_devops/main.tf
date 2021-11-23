@@ -13,12 +13,12 @@ resource "aws_vpc" "vpc_desafio" {
 
 # terraform import aws_internet_gateway.igw igw-<id>
 # igw ig = igw-00383a5bb2468a105
-resource "aws_internet_gateway" "igw_desafio" {
-    vpc_id = "vpc-0b7bc0aae8788da62"
-    tags = {
-        Name = "internet-gateway-desafio"
-    }
-}
+// resource "aws_internet_gateway" "igw_desafio" {
+//     vpc_id = "vpc-0b7bc0aae8788da62"
+//     tags = {
+//         Name = "internet-gateway-desafio"
+//     }
+// }
 
 resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
     vpc_id = "vpc-0b7bc0aae8788da62"
