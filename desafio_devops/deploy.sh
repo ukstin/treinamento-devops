@@ -2,8 +2,8 @@
 
 cd desafio_devops
 terraform init
-terraform import aws_vpc.vpc_desafio vpc-0b7bc0aae8788da62
-terraform import aws_internet_gateway.igw_desafio igw-00383a5bb2468a105
+#terraform import aws_vpc.vpc_desafio vpc-0b7bc0aae8788da62
+#terraform import aws_internet_gateway.igw_desafio igw-00383a5bb2468a105
 terraform apply -auto-approve
 
 echo "Aguardando criação de maquinas ..."
