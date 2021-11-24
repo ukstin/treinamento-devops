@@ -1,0 +1,16 @@
+[ec2-master]
+18.230.144.140
+[ec2-master:vars]
+ansible_python_interpreter=/usr/bin/python3
+[ec2-worker1]
+15.228.10.198
+[ec2-worker1:vars]
+ansible_python_interpreter=/usr/bin/python3
+[ec2-worker2]
+54.94.253.56
+[ec2-worker2:vars]
+ansible_python_interpreter=/usr/bin/python3
+[ec2-worker3]
+54.94.179.114
+[ec2-worker3:vars]
+ansible_python_interpreter=/usr/bin/python3
