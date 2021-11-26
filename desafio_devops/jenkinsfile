@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone GIT') {
+            steps {
+                git url: 'https://github.com/ukstin/treinamento-devops.git', branch:'main'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh "desafio_devops/deploy.sh"
+            }
+        }
+    }
+}
